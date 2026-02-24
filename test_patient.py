@@ -29,6 +29,12 @@ class TestPatientRegistry(unittest.TestCase):
 
 
 
+    def test_register_invalid_name(self):
+        # REQ-01: Empty name raises ValueError
+        with self.assertRaises(ValueError):
+            self.registry.register_patient("")
+
+
     def test_invalid_patient_id_format(self):
         # REQ-02: Invalid patient ID format raises ValueError
         with self.assertRaises(ValueError):
