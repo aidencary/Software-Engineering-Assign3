@@ -16,12 +16,25 @@ class TestPatientRegistry(unittest.TestCase):
         # Verify Data
         self.assertEqual(record['name'], 'Bob')
         self.assertEqual(pid, 'P-101')
+
+
         
 
+
     def test_search_for_non_existent_patient(self):
+        # REQ-02: Non-existent patient raises KeyError
         # Use assertRaises
         with self.assertRaises(KeyError):
             self.registry.get_patient('P-9999')
+
+
+
+    def test_invalid_patient_id_format(self):
+        # REQ-02: Invalid patient ID format raises ValueError
+        with self.assertRaises(ValueError):
+            self.registry.get_patient("ABC")
+
+
             
 if __name__ == '__main__':
     unittest.main()
