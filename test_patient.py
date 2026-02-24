@@ -39,7 +39,7 @@ class TestPatientRegistry(unittest.TestCase):
         # REQ-02: Invalid patient ID format raises ValueError
         with self.assertRaises(ValueError):
             self.registry.get_patient("ABC")
-
+             
 
             
 if __name__ == '__main__':
