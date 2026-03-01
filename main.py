@@ -1,9 +1,15 @@
 # main.py
 # Patient Registry System
 
+import os
 import unittest
 from patient_registry import PatientRegistry
 from test_patient import TestPatientRegistry
+
+
+def clear_terminal():
+    """Clears the terminal screen."""
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def print_registry_menu():
@@ -14,7 +20,8 @@ def print_registry_menu():
     print("3. Update patient name (ID cannot be changed)")
     print("4. Delete patient by ID")
     print("5. List all patients")
-    print("6. Go back to the main menu")
+    print("6. Clear terminal")
+    print("7. Go back to the main menu")
     choice = input("Enter your choice: ")
     return choice.strip()
 
@@ -36,7 +43,7 @@ def patient_registry_menu(registry):
                 print(f"Error: {e}")
         # Retrieve patient by ID
         elif choice == '2':
-            patient_id = input("Enter patient ID (e.g., P-101): ")
+            patient_id = input("Enter patient ID (e.g., P-XXX): ")
             try:
                 patient_info = registry.get_patient(patient_id)
                 print(f"Patient ID: {patient_id}, "
@@ -46,7 +53,7 @@ def patient_registry_menu(registry):
         # Update patient name
         elif choice == '3':
             try:
-                patient_id = input("Enter patient ID (e.g., P-101): ")
+                patient_id = input("Enter patient ID (e.g., P-XXX): ")
                 registry.get_patient(patient_id)
 
                 name = input("Enter new patient name: ")
@@ -60,7 +67,7 @@ def patient_registry_menu(registry):
         # Delete patient by ID
         elif choice == '4':
             try:
-                patient_id = input("Enter patient ID (e.g., P-101): ")
+                patient_id = input("Enter patient ID (e.g., P-XXX): ")
                 registry.get_patient(patient_id)
                 result = registry.delete_patient(patient_id)
 
@@ -72,20 +79,24 @@ def patient_registry_menu(registry):
         # List all patients
         elif choice == '5':
             registry.print_patients()
-        # Go back to the main menu
+        # Clear terminal
         elif choice == '6':
+            clear_terminal()
+        # Go back to the main menu
+        elif choice == '7':
             print("Returning to main menu...")
             break
         # Invalid choice handling
         else:
-            print("Invalid choice. Please choose 1-6.")
+            print("Invalid choice. Please choose 1-7.")
 
 
 def print_main_menu():
     """Prints the main menu and returns the user's choice."""
     print("\n=== Main Menu ===")
     print("1. Run Application")
-    print("2. Exit")
+    print("2. Clear terminal")
+    print("3. Exit")
     choice = input("Enter your choice: ")
     return choice.strip()
 
@@ -103,11 +114,14 @@ def run_app():
             patient_registry_menu(registry)
 
         elif choice == '2':
+            clear_terminal()
+
+        elif choice == '3':
             print("Exiting the Patient Registry System.")
             break
 
         else:
-            print("Invalid choice. Please choose 1-2.")
+            print("Invalid choice. Please choose 1-3.")
 
 
 if __name__ == "__main__":
