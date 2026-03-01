@@ -1,11 +1,54 @@
 # Patient Registry System
 
-A simple patient record management system that demonstrates Design Realization principles by translating software requirements into functional code with full traceability.
+## Project Overview
+
+The **Simple Patient Record System (SPRS)** is an educational software project designed to demonstrate the complete software development lifecycle, from requirements engineering through design to implementation. This system showcases how to systematically translate software requirements into high-quality, maintainable code while maintaining strict traceability between requirements, design, and implementation.
+
+### System Description
+
+The SPRS is a command-line application that manages basic patient medical records. It provides a user-friendly, menu-driven interface for healthcare administrators to perform essential patient data operations. The system uses a dictionary-based data structure to simulate a database, making it lightweight and educational while maintaining realistic functionality.
+
+**Key Capabilities:**
+- Create and store patient records with auto-generated unique identifiers
+- Retrieve patient information using their Patient ID
+- Update patient information while maintaining data integrity
+- Delete patient records with proper error handling
+- List all registered patients in the system
+- Comprehensive input validation and error messaging
 
 - Google Doc link to report
   - https://docs.google.com/document/d/13aECFGq0OhhfOrgOAeFHFJJXbwxT4WJCn6v-0xZ7QdI/edit?usp=sharing
 
-## Features
+### Design Approach
+
+The system follows a **layered architecture** pattern with clear separation of concerns:
+
+1. **Presentation Layer** (`main.py`): Handles user interaction through a 
+   two-tier menu system
+2. **Business Logic Layer** (`patient_registry.py`): Implements core patient 
+   management operations
+3. **Data Storage Layer**: Dictionary-based in-memory data structure simulating 
+   a database
+
+### Data Model
+
+Each patient record is stored as a dictionary entry:
+```python
+patient_id -> {
+    "patient_id": "P-101",
+    "name": "John Doe"
+}
+```
+
+**Key Design Decisions:**
+- **Unique ID Generation**: Sequential IDs (P-101, P-102, ...) ensure 
+  uniqueness and traceability
+- **Immutable IDs**: Patient IDs are read-only after creation, preventing 
+  data integrity issues
+- **Dictionary Storage**: Provides O(1) lookup time and simulates real 
+  database key-value relationships
+
+## Requirements Specification
 
 This system implements the following requirements:
 
@@ -33,7 +76,8 @@ Software-Engineering-Assign3/
 ├── main.py                  # Menu-driven user interface
 ├── patient_registry.py      # PatientRegistry class implementation
 ├── test_patient.py          # Unit tests for all requirements
-├── README.md                # Project documentation
+├── README.md                # Complete project documentation
+├── PROJECT_SUMMARY.md       # Quick reference summary
 │
 ├── docs/
 │   └── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
@@ -80,8 +124,24 @@ python main.py
 
 ## Implementation Principles
 
+This project exemplifies professional software engineering practices:
+
+### Code Quality Standards
+
 - **Readability**: PEP8 compliant with descriptive naming conventions
-- **Single Responsibility**: PatientRegistry handles only patient data management
-- **Encapsulation**: Patient data stored in private dictionary with public interface
-- **Traceability**: All methods tagged with requirement comments (# REQ-01, etc.)
-- **Error Handling**: Comprehensive validation and error messages
+- **Single Responsibility**: PatientRegistry handles only patient data 
+  management; main.py handles only user interaction
+- **Encapsulation**: Patient data stored in private dictionary with public 
+  interface methods
+- **Traceability**: All methods tagged with requirement comments 
+  (# REQ-01, etc.)
+- **Self-Documenting Code**: Clear method names, comprehensive docstrings, 
+  and inline comments
+- **Error Handling**: Comprehensive validation and user-friendly error messages
+
+### Testing Strategy
+
+- **Unit Testing**: 10 comprehensive test cases covering all requirements
+- **Edge Case Testing**: Invalid inputs, non-existent records, empty data
+- **Error Path Testing**: Validates proper exception handling
+- **Test Coverage**: 100% coverage of all public methods
