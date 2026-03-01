@@ -75,6 +75,7 @@ Software-Engineering-Assign3/
 │
 ├── main.py                  # Menu-driven user interface
 ├── patient_registry.py      # PatientRegistry class implementation
+├── SPRS.py                  # Simple Patient Record System (all files in one)
 ├── test_patient.py          # Unit tests for all requirements
 ├── README.md                # Complete project documentation
 ├── PROJECT_SUMMARY.md       # Quick reference summary
@@ -96,7 +97,8 @@ python main.py
 
 **Main Menu:**
 1. Run Application
-2. Exit
+2. Clear terminal
+3. Exit
 
 **Patient Registry Menu:**
 1. Register a new patient
@@ -104,7 +106,8 @@ python main.py
 3. Update patient name (ID cannot be changed)
 4. Delete patient by ID
 5. List all patients
-6. Go back to the main
+6. Clear terminal
+7. Go back to the main menu
 
 ## Requirements
 
@@ -145,3 +148,38 @@ This project exemplifies professional software engineering practices:
 - **Edge Case Testing**: Invalid inputs, non-existent records, empty data
 - **Error Path Testing**: Validates proper exception handling
 - **Test Coverage**: 100% coverage of all public methods
+
+## Member Contributions
+
+### Aiden Cary
+- Created initial main.py and patient_registry.py
+- Implemented REQ-01 (patient registration) and REQ-02 (patient retrieval)
+- Implemented print_patients() method for listing all records
+- Created print menu helper methods
+- Designed and implemented a two-tier menu system
+- Refactored patient registry
+- Created and updated the README with comprehensive documentation
+- Added and improved error handling throughout the application
+- Added screenshot evidence to the report
+- Ensured PEP8 compliance across all files
+- Created SPRS.py with all the source code and added it to the report
+
+### Zach Atchley
+- Helped create test_patient.py test suite
+- Implemented REQ-04 requirement (update patient name functionality)
+- Implemented the REQ-05 requirement (delete patient record functionality)
+- Created test cases for the update_patient_name() method
+- Created test cases for the delete_patient() method
+- Developed error handling tests for non-existent patients
+- Contributed to method return type specifications
+- Tested edge cases for deletion operations
+
+### Keller Willhite
+- Helped create test_patient.py test suite
+- Finalized test_patient.py test suite with all 10 tests
+- Created comprehensive test cases for all requirements (REQ-01 through REQ-05)
+- Implemented validation tests (invalid names, invalid ID formats)
+- Developed test cases for error handling scenarios
+- Ensured 100% test coverage of all public methods
+- Validated data integrity through testing
+- Documented test requirement traceability with comments
