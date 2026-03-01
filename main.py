@@ -5,19 +5,17 @@ import unittest
 from patient_registry import PatientRegistry
 from test_patient import TestPatientRegistry
 
-def run_app():
-    # Create an instance of PatientRegistry
-    registry = PatientRegistry()
 
-    # Menu for PatientRegistry
+def patient_registry_menu(registry):
+    """Submenu for Patient Registry operations"""
     while True:
-        print("\nPatient Registry System")
+        print("\n--- Patient Registry System ---")
         print("1. Register a new patient")
-        print("2. Retrieve patient information")
-        print("3. Print all registered patients")
-        print("4. Update patient name")
-        print("5. Delete patient record")
-        print("6. Exit")
+        print("2. Retrieve patient by ID")
+        print("3. Update patient name (ID cannot be changed)")
+        print("4. Delete patient by ID")
+        print("5. List all patients")
+        print("6. Go back to the main")
 
         choice = input("Enter your choice: ")
 
@@ -33,14 +31,12 @@ def run_app():
             patient_id = input("Enter patient ID (e.g., P-101): ")
             try:
                 patient_info = registry.get_patient(patient_id)
-                print(f"Patient ID: {patient_id}, Name: {patient_info['name']}")
+                print(f"Patient ID: {patient_id}, "
+                      f"Name: {patient_info['name']}")
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
 
         elif choice == '3':
-            registry.print_patients()
-
-        elif choice == '4':
             try:
                 patient_id = input("Enter patient ID (e.g., P-101): ")
                 registry.get_patient(patient_id)
@@ -52,7 +48,7 @@ def run_app():
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
 
-        elif choice == '5':
+        elif choice == '4':
             try:
                 patient_id = input("Enter patient ID (e.g., P-101): ")
                 registry.get_patient(patient_id)
@@ -62,12 +58,39 @@ def run_app():
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
 
+        elif choice == '5':
+            registry.print_patients()
+
         elif choice == '6':
+            print("Returning to main menu...")
+            break
+
+        else:
+            print("Invalid choice. Please choose 1-6.")
+
+
+def run_app():
+    """Main menu for the application"""
+    # Create an instance of PatientRegistry
+    registry = PatientRegistry()
+
+    while True:
+        print("\n=== Main Menu ===")
+        print("1. Run Application")
+        print("2. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            patient_registry_menu(registry)
+
+        elif choice == '2':
             print("Exiting the Patient Registry System.")
             break
 
         else:
-            print("Invalid choice. Please try again.")
+            print("Invalid choice. Please choose 1-2.")
+
 
 if __name__ == "__main__":
     # Run unit tests
@@ -75,4 +98,3 @@ if __name__ == "__main__":
 
     # Run the application
     run_app()
-    

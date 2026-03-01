@@ -1,24 +1,28 @@
 # patient_registry.py
 # PatientRegistry class for managing patient records.
+
+
 class PatientRegistry:
     # Constructor
     def __init__(self):
         self.patients = {}
-        # 101 is the starting patient ID which is incremented for each new patient registration
+        # 101 is the starting patient ID which is incremented for
+        # each new patient registration
         self.patient_id = "P-101"
 
     # Method to register a new patient
     def register_patient(self, name: str) -> str:
         """
         Registers a new patient and returns the assigned patient ID.
-        Avoids duplicate patient IDs by incrementing the patient ID for each new registration.
-        Validates that the name is a non-empty string.
+        Avoids duplicate patient IDs by incrementing the patient ID for
+        each new registration. Validates that the name is a non-empty
+        string.
         """
         if not isinstance(name, str) or name == "":
             raise ValueError("Name must be a non-empty string")
 
-        # REQ-01: Generate unique patient ID and store patient information
-        # REQ-03 Prevent modification of Patient ID after assignment (setter is not provided)
+        # REQ-01: Generate unique patient ID and store patient info
+        # REQ-03: Prevent modification of Patient ID after assignment
         current_id = self.patient_id
         self.patients[current_id] = {"name": name}
         self.patient_id = str(int(self.patient_id.split("-")[1]) + 1)
@@ -32,16 +36,17 @@ class PatientRegistry:
         Retrieves patient information by patient ID.
         Returns an error message if patient ID does not exist.
         """
-        # REQ-02: Retrieve patient information by ID with error handling for non-existent IDs
+        # REQ-02: Retrieve patient information by ID with error
+        # handling for non-existent IDs
         pid = str(patient_id).strip("P-")
         if not pid.isdigit() or int(pid) < 101:
             raise ValueError("Invalid patient ID format")
-        
+
         if patient_id not in self.patients:
             raise KeyError("Patient ID does not exist")
 
         return self.patients[patient_id]
-    
+
     # Print all registered patients
     def print_patients(self):
         """
@@ -50,7 +55,7 @@ class PatientRegistry:
         if not self.patients:
             print("No patients registered.")
             return
-        
+
         for pid, info in self.patients.items():
             print(f"Patient ID: {pid}, Name: {info['name']}")
 
@@ -59,7 +64,8 @@ class PatientRegistry:
         """
         Updates the name associated with the given patient ID.
         """
-        # REQ-04: Update patient name with patient ID (ID remains unchanged)
+        # REQ-04: Update patient name with patient ID
+        # (ID remains unchanged)
         if not isinstance(name, str) or name == "":
             raise ValueError("Name must be a non-empty string")
         self.patients[patient_id] = {"name": name}
@@ -73,11 +79,9 @@ class PatientRegistry:
         del self.patients[patient_id]
 
 
-    
 if __name__ == "__main__":
     registry = PatientRegistry()
     print("Registering patients...")
     registry.register_patient("Alice")
     registry.register_patient("Bob")
     registry.print_patients()
-            
