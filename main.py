@@ -5,7 +5,9 @@ import unittest
 from patient_registry import PatientRegistry
 from test_patient import TestPatientRegistry
 
+
 def print_registry_menu():
+    """Prints the patient registry menu and returns the user's choice."""
     print("\n--- Patient Registry System ---")
     print("1. Register a new patient")
     print("2. Retrieve patient by ID")
@@ -16,12 +18,13 @@ def print_registry_menu():
     choice = input("Enter your choice: ")
     return choice.strip()
 
+
 def patient_registry_menu(registry):
     """Submenu for Patient Registry operations"""
     while True:
-        
+
         # Display the patient registry menu and get user choice
-        choice = print_registry_menu()       
+        choice = print_registry_menu()
 
         # Register a new patient
         if choice == '1':
@@ -77,12 +80,15 @@ def patient_registry_menu(registry):
         else:
             print("Invalid choice. Please choose 1-6.")
 
+
 def print_main_menu():
+    """Prints the main menu and returns the user's choice."""
     print("\n=== Main Menu ===")
     print("1. Run Application")
     print("2. Exit")
     choice = input("Enter your choice: ")
     return choice.strip()
+
 
 def run_app():
     """Main menu for the application"""
@@ -91,7 +97,7 @@ def run_app():
 
     while True:
         # Display the main menu and get user choice
-        choice = print_main_menu()        
+        choice = print_main_menu()
 
         if choice == '1':
             patient_registry_menu(registry)

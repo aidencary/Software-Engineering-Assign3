@@ -1,7 +1,6 @@
 # patient_registry.py
 # PatientRegistry class for managing patient records.
 
-
 class PatientRegistry:
     # Constructor
     def __init__(self):
