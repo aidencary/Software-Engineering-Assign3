@@ -24,7 +24,7 @@ class PatientRegistry:
         # REQ-01: Generate unique patient ID and store patient info
         # REQ-03: Prevent modification of Patient ID after assignment
         current_id = self.patient_id
-        self.patients[current_id] = {"name": name}
+        self.patients[current_id] = {"patient_id": current_id, "name": name}
         self.patient_id = str(int(self.patient_id.split("-")[1]) + 1)
         self.patient_id = f"P-{self.patient_id}"
 
@@ -60,23 +60,27 @@ class PatientRegistry:
             print(f"Patient ID: {pid}, Name: {info['name']}")
 
     # Update patient name
-    def update_patient_name(self, patient_id, name):
+    def update_patient_name(self, patient_id: str, name: str) -> dict:
         """
         Updates the name associated with the given patient ID.
+        Returns the updated patient record.
         """
         # REQ-04: Update patient name with patient ID
         # (ID remains unchanged)
         if not isinstance(name, str) or name == "":
             raise ValueError("Name must be a non-empty string")
-        self.patients[patient_id] = {"name": name}
+        self.patients[patient_id] = {"patient_id": patient_id, "name": name}
+        return self.patients[patient_id]
 
     # Delete patient record
-    def delete_patient(self, patient_id):
+    def delete_patient(self, patient_id: str) -> bool:
         """
         Deletes the patient record with the corresponding patient ID.
+        Returns True if deletion was successful.
         """
         # REQ-05: Delete patient using Patient ID
         del self.patients[patient_id]
+        return True
 
 
 if __name__ == "__main__":

@@ -16,6 +16,7 @@ class TestPatientRegistry(unittest.TestCase):
 
         # Verify Data
         self.assertEqual(record['name'], 'Bob')
+        self.assertEqual(record['patient_id'], 'P-101')
         self.assertEqual(pid, 'P-101')
 
     def test_search_for_non_existent_patient(self):
@@ -42,16 +43,21 @@ class TestPatientRegistry(unittest.TestCase):
         record = self.registry.get_patient(pid)
 
         self.assertEqual(record["name"], test_name)
+        self.assertEqual(record["patient_id"], pid)
         self.assertEqual(pid, "P-101")
 
     def test_update_patient_name(self):
         # REQ-04: Update a patient's name using Patient ID - Willhite
         pid = self.registry.register_patient("Alice")
-        self.registry.update_patient_name(pid, "Alicia")
+        updated_record = self.registry.update_patient_name(pid, "Alicia")
 
-        # Verify the name was updated
-        updated_record = self.registry.get_patient(pid)
+        # Verify the return value
         self.assertEqual(updated_record["name"], "Alicia")
+        self.assertEqual(updated_record["patient_id"], pid)
+
+        # Verify the name was updated in storage
+        retrieved_record = self.registry.get_patient(pid)
+        self.assertEqual(retrieved_record["name"], "Alicia")
         self.assertEqual(pid, "P-101")
 
     def test_update_non_existent_patient(self):
@@ -69,7 +75,10 @@ class TestPatientRegistry(unittest.TestCase):
     def test_delete_patient(self):
         # REQ-05: Delete patient using Patient ID - Willhite
         pid = self.registry.register_patient("Bob")
-        self.registry.delete_patient(pid)
+        result = self.registry.delete_patient(pid)
+
+        # Verify deletion returns True
+        self.assertTrue(result)
 
         # Confirm patient is deleted
         with self.assertRaises(KeyError):

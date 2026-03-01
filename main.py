@@ -42,9 +42,11 @@ def patient_registry_menu(registry):
                 registry.get_patient(patient_id)
 
                 name = input("Enter new patient name: ")
-                registry.update_patient_name(patient_id, name)
+                updated_record = registry.update_patient_name(patient_id,
+                                                              name)
 
-                print(f"Updated patient with ID: {patient_id}")
+                print(f"Updated Patient - ID: {updated_record['patient_id']}"
+                      f", Name: {updated_record['name']}")
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
 
@@ -52,9 +54,11 @@ def patient_registry_menu(registry):
             try:
                 patient_id = input("Enter patient ID (e.g., P-101): ")
                 registry.get_patient(patient_id)
-                registry.delete_patient(patient_id)
+                result = registry.delete_patient(patient_id)
 
-                print(f"Deleted patient record with ID: {patient_id}")
+                if result:
+                    print(f"Successfully deleted patient record with ID: "
+                          f"{patient_id}")
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
 
