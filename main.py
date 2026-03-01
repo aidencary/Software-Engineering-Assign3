@@ -5,20 +5,25 @@ import unittest
 from patient_registry import PatientRegistry
 from test_patient import TestPatientRegistry
 
+def print_registry_menu():
+    print("\n--- Patient Registry System ---")
+    print("1. Register a new patient")
+    print("2. Retrieve patient by ID")
+    print("3. Update patient name (ID cannot be changed)")
+    print("4. Delete patient by ID")
+    print("5. List all patients")
+    print("6. Go back to the main menu")
+    choice = input("Enter your choice: ")
+    return choice.strip()
 
 def patient_registry_menu(registry):
     """Submenu for Patient Registry operations"""
     while True:
-        print("\n--- Patient Registry System ---")
-        print("1. Register a new patient")
-        print("2. Retrieve patient by ID")
-        print("3. Update patient name (ID cannot be changed)")
-        print("4. Delete patient by ID")
-        print("5. List all patients")
-        print("6. Go back to the main")
+        
+        # Display the patient registry menu and get user choice
+        choice = print_registry_menu()       
 
-        choice = input("Enter your choice: ")
-
+        # Register a new patient
         if choice == '1':
             name = input("Enter patient's name: ")
             try:
@@ -26,7 +31,7 @@ def patient_registry_menu(registry):
                 print(f"Patient registered with ID: {patient_id}")
             except ValueError as e:
                 print(f"Error: {e}")
-
+        # Retrieve patient by ID
         elif choice == '2':
             patient_id = input("Enter patient ID (e.g., P-101): ")
             try:
@@ -35,7 +40,7 @@ def patient_registry_menu(registry):
                       f"Name: {patient_info['name']}")
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
-
+        # Update patient name
         elif choice == '3':
             try:
                 patient_id = input("Enter patient ID (e.g., P-101): ")
@@ -49,7 +54,7 @@ def patient_registry_menu(registry):
                       f", Name: {updated_record['name']}")
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
-
+        # Delete patient by ID
         elif choice == '4':
             try:
                 patient_id = input("Enter patient ID (e.g., P-101): ")
@@ -61,17 +66,23 @@ def patient_registry_menu(registry):
                           f"{patient_id}")
             except (ValueError, KeyError) as e:
                 print(f"Error: {e}")
-
+        # List all patients
         elif choice == '5':
             registry.print_patients()
-
+        # Go back to the main menu
         elif choice == '6':
             print("Returning to main menu...")
             break
-
+        # Invalid choice handling
         else:
             print("Invalid choice. Please choose 1-6.")
 
+def print_main_menu():
+    print("\n=== Main Menu ===")
+    print("1. Run Application")
+    print("2. Exit")
+    choice = input("Enter your choice: ")
+    return choice.strip()
 
 def run_app():
     """Main menu for the application"""
@@ -79,11 +90,8 @@ def run_app():
     registry = PatientRegistry()
 
     while True:
-        print("\n=== Main Menu ===")
-        print("1. Run Application")
-        print("2. Exit")
-
-        choice = input("Enter your choice: ")
+        # Display the main menu and get user choice
+        choice = print_main_menu()        
 
         if choice == '1':
             patient_registry_menu(registry)
