@@ -15,7 +15,9 @@ def run_app():
         print("1. Register a new patient")
         print("2. Retrieve patient information")
         print("3. Print all registered patients")
-        print("4. Exit")
+        print("4. Update patient name")
+        print("5. Delete patient record")
+        print("6. Exit")
 
         choice = input("Enter your choice: ")
 
@@ -39,6 +41,28 @@ def run_app():
             registry.print_patients()
 
         elif choice == '4':
+            try:
+                patient_id = input("Enter patient ID (e.g., P-101): ")
+                registry.get_patient(patient_id)
+
+                name = input("Enter new patient name: ")
+                registry.update_patient_name(patient_id, name)
+
+                print(f"Updated patient with ID: {patient_id}")
+            except (ValueError, KeyError) as e:
+                print(f"Error: {e}")
+
+        elif choice == '5':
+            try:
+                patient_id = input("Enter patient ID (e.g., P-101): ")
+                registry.get_patient(patient_id)
+                registry.delete_patient(patient_id)
+
+                print(f"Deleted patient record with ID: {patient_id}")
+            except (ValueError, KeyError) as e:
+                print(f"Error: {e}")
+
+        elif choice == '6':
             print("Exiting the Patient Registry System.")
             break
 

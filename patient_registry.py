@@ -53,6 +53,26 @@ class PatientRegistry:
         
         for pid, info in self.patients.items():
             print(f"Patient ID: {pid}, Name: {info['name']}")
+
+    # Update patient name
+    def update_patient_name(self, patient_id, name):
+        """
+        Updates the name associated with the given patient ID.
+        """
+        # REQ-04: Update patient name with patient ID (ID remains unchanged)
+        if not isinstance(name, str) or name == "":
+            raise ValueError("Name must be a non-empty string")
+        self.patients[patient_id] = {"name": name}
+
+    # Delete patient record
+    def delete_patient(self, patient_id):
+        """
+        Deletes the patient record with the corresponding patient ID.
+        """
+        # REQ-05: Delete patient using Patient ID
+        del self.patients[patient_id]
+
+
     
 if __name__ == "__main__":
     registry = PatientRegistry()
