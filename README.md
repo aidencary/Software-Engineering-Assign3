@@ -82,10 +82,10 @@ Software-Engineering-Assign3/
 ├── .gitignore               # Git ignore configuration
 │
 ├── docs/
-│   ├── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
-│   └── SPRS_High_Level_Diagram.drawio.pdf
-│
-└── __pycache__/             # Python cache files (ignored by git)
+    ├── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
+    └── SPRS_High_Level_Diagram.drawio.pdf
+    └── SPRS_Class_Diagram.drawio.pdf
+
 ```
 
 ## Usage
@@ -175,6 +175,7 @@ This project exemplifies professional software engineering practices:
 - Developed error handling tests for non-existent patients
 - Contributed to method return type specifications
 - Tested edge cases for deletion operations
+- Created High-Level Architecture diagram
 
 ### Keller Willhite
 - Helped create test_patient.py test suite
@@ -185,3 +186,4 @@ This project exemplifies professional software engineering practices:
 - Ensured 100% test coverage of all public methods
 - Validated data integrity through testing
 - Documented test requirement traceability with comments
+- Created class diagram
