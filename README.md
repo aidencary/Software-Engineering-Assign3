@@ -79,11 +79,13 @@ Software-Engineering-Assign3/
 ├── test_patient.py          # Unit tests for all requirements
 ├── README.md                # Complete project documentation
 ├── PROJECT_SUMMARY.md       # Quick reference summary
+├── .gitignore               # Git ignore configuration
 │
 ├── docs/
-│   └── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
+│   ├── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
+│   └── SPRS_High_Level_Diagram.drawio.pdf
 │
-└── __pycache__/             # Python cache files
+└── __pycache__/             # Python cache files (ignored by git)
 ```
 
 ## Usage
