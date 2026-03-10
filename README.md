@@ -84,7 +84,7 @@ Software-Engineering-Assign3/
 ├── docs/
     ├── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
     └── SPRS_High_Level_Diagram.drawio.pdf
-    └── SPRS_Class_Diagram.drawio.pdf
+    └── SPRS_Class_Diagram.drawio.png
 
 ```
 
