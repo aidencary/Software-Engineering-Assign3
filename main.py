@@ -3,7 +3,7 @@
 
 import unittest
 from patient_registry import PatientRegistry
-from test_patient import TestPatientRegistry
+from test_patient_registry import TestPatientRegistry
 
 def run_app():
     # Create an instance of PatientRegistry
