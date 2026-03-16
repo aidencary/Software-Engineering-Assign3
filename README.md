@@ -75,7 +75,6 @@ Software-Engineering-Assign3/
 │
 ├── main.py                  # Menu-driven user interface
 ├── patient_registry.py      # PatientRegistry class implementation
-├── SPRS.py                  # Simple Patient Record System (all files in one)
 ├── test_patient.py          # Unit tests for all requirements
 ├── README.md                # Complete project documentation
 ├── PROJECT_SUMMARY.md       # Quick reference summary
@@ -164,7 +163,6 @@ This project exemplifies professional software engineering practices:
 - Added and improved error handling throughout the application
 - Added screenshot evidence to the report
 - Ensured PEP8 compliance across all files
-- Created SPRS.py with all the source code and added it to the report
 
 ### Zach Atchley
 - Helped create test_patient.py test suite
