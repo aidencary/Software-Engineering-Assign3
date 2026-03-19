@@ -41,18 +41,6 @@ class PatientRegistry:
             raise KeyError("Patient ID does not exist")
 
         return self.patients[patient_id]
-    
-    # Print all registered patients
-    def print_patients(self):
-        """
-        Prints all registered patients in a readable format.
-        """
-        if not self.patients:
-            print("No patients registered.")
-            return
-        
-        for pid, info in self.patients.items():
-            print(f"Patient ID: {pid}, Name: {info['name']}")
 
     # Update patient name
     def update_patient_name(self, patient_id, name):
@@ -72,12 +60,4 @@ class PatientRegistry:
         # REQ-05: Delete patient using Patient ID
         del self.patients[patient_id]
 
-
-    
-if __name__ == "__main__":
-    registry = PatientRegistry()
-    print("Registering patients...")
-    registry.register_patient("Alice")
-    registry.register_patient("Bob")
-    registry.print_patients()
             
