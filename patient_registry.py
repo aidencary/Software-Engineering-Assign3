@@ -68,6 +68,8 @@ class PatientRegistry:
         # (ID remains unchanged)
         if not isinstance(name, str) or name == "":
             raise ValueError("Name must be a non-empty string")
+        if patient_id not in self.patients:
+            raise KeyError("Patient ID does not exist")
         self.patients[patient_id] = {"patient_id": patient_id, "name": name}
         return self.patients[patient_id]
 
@@ -78,6 +80,8 @@ class PatientRegistry:
         Returns True if deletion was successful.
         """
         # REQ-05: Delete patient using Patient ID
+        if patient_id not in self.patients:
+            raise KeyError("Patient ID does not exist")
         del self.patients[patient_id]
         return True
 

@@ -135,16 +135,11 @@ class TestPatientRegistry(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.registry.update_patient_name(pid, "")
 
-    def test_update_defect_nonexistent_id(self):
-        """Test update_patient_name with a valid name and non-existent ID.
-
-        Creates a new entry instead of raising an error — documents a known defect.
-        """
-        # REQ-04 | TESTS: TC-U2 (DEFECT: ID not found but no error raised)
-        result = self.registry.update_patient_name("P-9999", "Alicia")
-
-        self.assertEqual(result["patient_id"], "P-9999")
-        self.assertEqual(result["name"], "Alicia")
+    def test_update_nonexistent_id(self):
+        """Test update_patient_name with a valid name and non-existent ID raises KeyError."""
+        # REQ-04 | TESTS: TC-U2
+        with self.assertRaises(KeyError):
+            self.registry.update_patient_name("P-9999", "Alicia")
 
     def test_update_invalid_name_nonexistent_id(self):
         """Test update_patient_name with an empty name and non-existent ID raises ValueError."""
@@ -219,26 +214,23 @@ class TestPatientRegistryComponents(unittest.TestCase):
         self.assertEqual(record["name"], "Alicia")     # REQ-04: persisted name
         self.assertNotEqual(record["name"], "Alice")   # old name is gone
 
-    def test_component_update_nonexistent_creates_ghost_record(self):
+    def test_component_update_nonexistent_raises_key_error(self):
         """
-        CT-02 - Defect multi-step workflow.
-        Workflow: update_patient_name() on unregistered ID -> get_patient()
+        CT-02 - Failure workflow: update on unregistered ID is rejected.
+        Workflow: update_patient_name() on unregistered ID -> KeyError raised,
+                  get_patient() also raises KeyError (record was never inserted).
         TESTS: REQ-02, REQ-04
-        Defect: update_patient_name() silently inserts a new record instead
-        of raising KeyError. The ghost record is then retrievable via
-        get_patient(), meaning an unregistered ID entered the system.
-        Branch coverage: name guard False (valid name) -> defect path taken.
-        Condition coverage: C1 (not isinstance) = False, C2 (name=="") = False.
+        Branch coverage: name guard False (valid name) -> ID guard True -> KeyError.
+        Condition coverage: C1 (not isinstance) = False, C2 (name=="") = False,
+        C3 (ID not in patients) = True.
         """
-        # Step 1: update a patient ID that was never registered
-        ghost = self.registry.update_patient_name("P-9999", "Ghost")
-        self.assertEqual(ghost["patient_id"], "P-9999")  # defect: entry created
-        self.assertEqual(ghost["name"], "Ghost")
+        # Step 1: update a patient ID that was never registered — must raise KeyError
+        with self.assertRaises(KeyError):
+            self.registry.update_patient_name("P-9999", "Ghost")
 
-        # Step 2: retrieve the ghost record (should not exist, but does)
-        record = self.registry.get_patient("P-9999")
-        self.assertEqual(record["patient_id"], "P-9999")
-        self.assertEqual(record["name"], "Ghost")
+        # Step 2: confirm no ghost record was inserted
+        with self.assertRaises(KeyError):
+            self.registry.get_patient("P-9999")
 
     def test_component_register_delete_retrieve_fails(self):
         """
