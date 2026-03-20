@@ -76,6 +76,7 @@ Software-Engineering-Assign3/
 ├── main.py                      # Menu-driven user interface
 ├── patient_registry.py          # PatientRegistry class implementation
 ├── test_patient_registry.py     # Unit and component tests for all requirements
+├── requirements.txt             # Python dependencies (coverage)
 ├── README.md                    # Complete project documentation
 ├── .gitignore                   # Git ignore configuration
 │
@@ -118,6 +119,8 @@ python main.py
 ## Requirements
 
 - Python 3.x
+- coverage 7.13.5 (`pip install -r requirements.txt`)
+
 
 ## Testing
 
@@ -209,15 +212,13 @@ This project exemplifies professional software engineering practices:
 ### Assignment 4 (Testing Phase)
 
 #### Aiden Cary
-- Replaced test_patient.py with test_patient_registry.py — 25 automated test cases
-- Implemented all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
 - Implemented component tests (Phase 3): CT-01 valid workflow, CT-02 defect workflow, CT-03 failure workflow
 - Added statement, branch, and condition coverage annotations to all test comments
-- Created Component-Testing-SPRS.drawio.png diagram illustrating CT-01 and CT-02 workflows
+- Created Component-Testing-SPRS.drawio.png diagram illustrating CT-01, CT-02, and CT-03 workflows
 - Updated README to reflect Assignment 4 testing structure
 
 #### Zach Atchley
-- (Add contributions here)
+- Helped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
 
 #### Keller Willhite
-- (Add contributions here)
+- Helpped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
