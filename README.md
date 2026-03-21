@@ -221,9 +221,8 @@ This project exemplifies professional software engineering practices:
 - Replaced print-based pass/fail logic with proper `unittest` assertions while preserving print output
 - Added CT-02 (`test_component_update_nonexistent_raises_key_error`) to verify no ghost record is inserted on a failed update
 - Renamed component tests to descriptive method names
-- Added `requirements.txt` with `coverage` dependency
 - Removed generated files from git tracking (`.coverage`, `__pycache__`, `docs/htmlcov/`)
-- Created and updated Component-Testing.drawio.png diagram illustrating CT-01, CT-02, and CT-03 workflows
+- Created Component-Testing.drawio.png diagram illustrating CT-01, CT-02, and CT-03 workflows
 - Updated README to reflect Assignment 4 testing structure
 
 #### Zach Atchley
@@ -234,3 +233,5 @@ This project exemplifies professional software engineering practices:
 
 #### Keller Willhite
 - Helped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
+- Verified and reviewed new test suite and gathered all required code snippets and screenshots
+- Created Phase 5 report
