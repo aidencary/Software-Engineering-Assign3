@@ -139,8 +139,7 @@ python -m coverage html -d target/htmlcov
 
 | Class | Tests | Coverage |
 |---|---|---|
-| `TestPatientRegistry` | 22 unit tests | REQ-01 – REQ-05, error handling, boundary values |
-| `TestPatientRegistryComponents` | 3 component tests | CT-01 (valid), CT-02 (defect), CT-03 (failure) |
+| `TestPatientRegistry` | 22 unit tests + 2 component tests | REQ-01 – REQ-05, error handling, boundary values, CT-01 and CT-02 workflows |
 
 ## Implementation Principles
 
@@ -162,14 +161,14 @@ This project exemplifies professional software engineering practices:
 ### Testing Strategy
 
 - **Unit Testing**: 22 test cases covering all requirements (REQ-01 through REQ-05)
-- **Component Testing**: 3 multi-step workflow tests (CT-01 valid, CT-02 defect, CT-03 failure) verifying method interactions across REQ-01 through REQ-05
+- **Component Testing**: 2 multi-step workflow tests (CT-01 register→update→retrieve, CT-02 register→delete→retrieve) verifying method interactions across REQ-01 through REQ-05
 - **Equivalence Partitioning**: 10 partitions across `name` and `patient_id` inputs
 - **Boundary Value Analysis**: 3-point BVA on name length and patient ID numeric boundaries
 - **Decision Table Testing**: All condition/effect combinations for each method
 - **Edge Case Testing**: Invalid inputs, non-existent records, empty data
 - **Error Path Testing**: Validates proper exception handling
 - **Coverage Analysis**: Statement, branch, and condition coverage annotations on all tests; 100% statement coverage of `patient_registry.py`
-- **Total Test Cases**: 25 automated tests across `TestPatientRegistry` and `TestPatientRegistryComponents`
+- **Total Test Cases**: 24 automated tests in `TestPatientRegistry`
 
 ## Member Contributions
 
@@ -212,14 +211,23 @@ This project exemplifies professional software engineering practices:
 ### Assignment 4 (Testing Phase)
 
 #### Aiden Cary
-- Helped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
+- Merged and resolved conflicts from Zach's PR #2 (test refactor branch)
+- Integrated comprehensive unit test suite: normal, edge, boundary, and invalid-input scenarios across all requirements
+- Added `print_patients()` back to `patient_registry.py` after it was removed during merge
+- Added `KeyError` guard to `update_patient_name()` for non-existent patient IDs
 - Added statement, branch, and condition coverage annotations to all test comments
-- Created Component-Testing-SPRS.drawio.png diagram illustrating CT-01, CT-02, and CT-03 workflows
+- Renamed component tests to descriptive names (`test_component_register_update_retrieve`, `test_component_register_delete_retrieve_fails`)
+- Added `.coveragerc` to redirect HTML coverage output to `target/htmlcov/`
+- Added `requirements.txt` with `coverage` dependency
+- Updated `.gitignore` to exclude `target/`, `docs/htmlcov/`, and untracked previously committed generated files
+- Created Component-Testing-SPRS.drawio.png diagram illustrating CT-01 and CT-02 workflows
 - Updated README to reflect Assignment 4 testing structure
 
 #### Zach Atchley
-- Helped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
-- Implemented component tests (Phase 3): CT-01 valid workflow, CT-02 defect workflow, CT-03 failure workflow
+- Refactored test suite: replaced `test_patient.py` with `test_patient_registry.py`
+- Implemented component tests CT-01 (register→update→retrieve) and CT-02 (register→delete→retrieve)
+- Removed `print_patients()` method and `__main__` block from `patient_registry.py`
+- Helped implement unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
 
 #### Keller Willhite
-- Helpped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
+- Helped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
