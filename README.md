@@ -17,7 +17,7 @@ The SPRS is a command-line application that manages basic patient medical record
 - Comprehensive input validation and error messaging
 
 - Google Doc link to report
-  - https://docs.google.com/document/d/13aECFGq0OhhfOrgOAeFHFJJXbwxT4WJCn6v-0xZ7QdI/edit?usp=sharing
+  - https://docs.google.com/document/d/1Itb1MDzRj46rZafx4Mb4xZ3juGURaq95LeqySuSMR0Q/edit?usp=sharing
 
 ### Design Approach
 

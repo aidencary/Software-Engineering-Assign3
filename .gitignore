@@ -31,20 +31,6 @@ wheels/
 *.manifest
 *.spec
 
-# Unit test / coverage reports
-htmlcov/
-docs/htmlcov/
-target/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
 # Environments
 .env
 .venv
