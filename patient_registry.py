@@ -56,8 +56,22 @@ class PatientRegistry:
         # (ID remains unchanged)
         if not isinstance(name, str) or name == "":
             raise ValueError("Name must be a non-empty string")
+        if patient_id not in self.patients:
+            raise KeyError("Patient ID does not exist")
         self.patients[patient_id] = {"patient_id": patient_id, "name": name}
         return self.patients[patient_id]
+
+    # Print all registered patients
+    def print_patients(self):
+        """
+        Prints all registered patients in a readable format.
+        """
+        if not self.patients:
+            print("No patients registered.")
+            return
+
+        for pid, info in self.patients.items():
+            print(f"Patient ID: {pid}, Name: {info['name']}")
 
     # Delete patient record
     def delete_patient(self, patient_id: str) -> bool:

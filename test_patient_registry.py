@@ -1,185 +1,271 @@
+# test_patient_registry.py
+# Unit and component tests for PatientRegistry class.
 import unittest
+from unittest.mock import patch
 from patient_registry import PatientRegistry
 
+
 class TestPatientRegistry(unittest.TestCase):
-    
+
+    # Set up a new PatientRegistry instance before each test
     def setUp(self):
         self.registry = PatientRegistry()
 
+    # --- Registration and retrieval tests ---
 
-    def test_register_patient(self):
+    def test_register_retrieve(self):
+        """Test registering a patient and retrieving their information."""
+        # REQ-01, REQ-02 | TESTS: TC-01, TC-05, TC-R1, TC-G1, TC-BV5
+        pid = self.registry.register_patient('Bob')
+        record = self.registry.get_patient(pid)
+
+        self.assertEqual(record['name'], 'Bob')
+        self.assertEqual(record['patient_id'], 'P-101')
+        self.assertEqual(pid, 'P-101')
+
+    def test_register_invalid_name(self):
+        """Test registering patient with empty name raises ValueError."""
+        # REQ-01 | TESTS: TC-02, TC-R2, TC-BV1
+        with self.assertRaises(ValueError):
+            self.registry.register_patient("")
+
+    def test_register_non_string_name(self):
+        """Test registering a patient with a non-string name raises ValueError."""
+        # REQ-01 | TESTS: TC-03, TC-R3, TC-BV7
+        with self.assertRaises(ValueError):
+            self.registry.register_patient(123)
+
+    def test_register_none_name(self):
+        """Test registering a patient with None as the name raises ValueError."""
+        # REQ-01 | TESTS: TC-04
+        with self.assertRaises(ValueError):
+            self.registry.register_patient(None)
+
+    def test_register_single_char_name(self):
+        """Test registering a patient with a 1-character name succeeds."""
+        # REQ-01 | TESTS: TC-BV2
+        pid = self.registry.register_patient("A")
+        self.assertEqual(pid, "P-101")
+        self.assertEqual(self.registry.get_patient(pid)["name"], "A")
+
+    def test_register_two_char_name(self):
+        """Test registering a patient with a 2-character name succeeds."""
+        # REQ-01 | TESTS: TC-BV3
+        pid = self.registry.register_patient("AB")
+        self.assertEqual(pid, "P-101")
+        self.assertEqual(self.registry.get_patient(pid)["name"], "AB")
+
+    # --- Retrieval tests ---
+
+    def test_get_patient_by_id(self):
+        """Test retrieving a patient record using their Patient ID."""
+        # REQ-02, REQ-03 | TESTS: TC-05, TC-G1, TC-BV5
+        pid = self.registry.register_patient("Charlie")
+        record = self.registry.get_patient(pid)
+
+        self.assertEqual(record["name"], "Charlie")
+        self.assertEqual(record["patient_id"], pid)
+        self.assertEqual(pid, "P-101")
+
+    def test_search_for_non_existent_patient(self):
+        """Test that searching for a non-existent patient raises KeyError."""
+        # REQ-02 | TESTS: TC-06, TC-G2, TC-BV8
+        with self.assertRaises(KeyError):
+            self.registry.get_patient('P-9999')
+
+    def test_invalid_patient_id_format(self):
+        """Test retrieving with a letters-only patient ID raises ValueError."""
+        # REQ-02 | TESTS: TC-07, TC-G3
+        with self.assertRaises(ValueError):
+            self.registry.get_patient("ABC")
+
+    def test_get_numeric_only_id(self):
+        """Test retrieving with a numeric-only patient ID raises KeyError.
+
+        Spec expects ValueError, but strip('P-') only strips characters so
+        '101' passes format validation — documents a format validation defect.
         """
-        Test cases for register_patient(self, name: str) method.
-        TESTS: REQ-01
-        """
-        print('\nTesting register_patient()...\n')
+        # REQ-02 | TESTS: TC-08 (DEFECT: 'P-' prefix not enforced by format check)
+        with self.assertRaises(KeyError):
+            self.registry.get_patient("101")
 
-        self.registry = PatientRegistry()
+    def test_get_id_below_minimum(self):
+        """Test retrieving with a patient ID numeric part below 101 raises ValueError."""
+        # REQ-02 | TESTS: TC-09, TC-BV4
+        with self.assertRaises(ValueError):
+            self.registry.get_patient("P-100")
 
-        # Test cases: normal input, non-string input, empty string
-        tests = [('First Patient', 'Alice', 'P-101'),
-                 ('Second Patient', 'Bob', 'P-102'),
-                 ('Non-String Input', 42, ValueError),
-                 ('Empty String', '', ValueError)]
-        
-        # Loop through test cases and verify results
-        for test_name, patient_name, expected in tests:
-            try:
-                actual = self.registry.register_patient(patient_name)
-            except ValueError as e:
-                actual = type(e)
+    def test_get_empty_id(self):
+        """Test retrieving with an empty patient ID raises ValueError."""
+        # REQ-02 | TESTS: TC-10
+        with self.assertRaises(ValueError):
+            self.registry.get_patient("")
 
-            if actual == expected:
-                print(f'{test_name}: PASS')
-            else:
-                print(f'{test_name}: FAIL (Expected {expected}, Got {actual})')
+    def test_get_valid_format_not_registered(self):
+        """Test retrieving a valid-format ID that was never registered raises KeyError."""
+        # REQ-02 | TESTS: TC-BV6
+        with self.assertRaises(KeyError):
+            self.registry.get_patient("P-102")
 
-
-    def test_get_patient(self):
-        """
-        Test cases for get_patient(self, patient_id: str) method.
-        TESTS: REQ-02
-        """
-        print('\nTesting get_patient()...\n')
-
-        self.registry = PatientRegistry()
-        
-        # Register a patient for testing
-        self.registry.register_patient('Alice')
-
-        # Test cases: normal input, ID out of bounds, wrong format, non-existent ID
-        tests = [('Normal Input', 'P-101', 'Alice'),
-                 ('ID Out of Bounds', 'P-99', ValueError),
-                 ('Wrong Format 1', 101, KeyError),
-                 ('Wrong Format 2', 'P-Bob', ValueError),
-                 ('Non-Existent ID', 'P-999', KeyError)]
-        
-        # Loop through test cases and verify results
-        for test_name, pid, expected in tests:
-            try:
-                actual = self.registry.get_patient(pid)['name']
-            except (ValueError, KeyError) as e:
-                actual = type(e)
-            
-            if actual == expected:
-                print(f'{test_name}: PASS')
-            else:
-                print(f'{test_name}: FAIL (Expected {expected}, Got {actual})')
-
+    # --- Update tests ---
 
     def test_update_patient_name(self):
-        """
-        Test cases for update_patient_name(self, patient_id, name) method.
-        TESTS: REQ-04
-        """
-        print('\nTesting update_patient_name()...\n')
+        """Test updating a patient's name keeps the ID unchanged."""
+        # REQ-04 | TESTS: TC-U1
+        pid = self.registry.register_patient("Alice")
+        updated_record = self.registry.update_patient_name(pid, "Alicia")
 
-        self.registry = PatientRegistry()
+        self.assertEqual(updated_record["name"], "Alicia")
+        self.assertEqual(updated_record["patient_id"], pid)
 
-        # Register a patient for testing
-        self.registry.register_patient('Alice')
+        retrieved_record = self.registry.get_patient(pid)
+        self.assertEqual(retrieved_record["name"], "Alicia")
+        self.assertEqual(pid, "P-101")
 
-        # Test cases: normal input, non-string input, empty string
-        tests = [('Normal', 'Bob', 'Bob'),
-                 ('Non-String Input', 42, ValueError),
-                 ('Empty String', '', ValueError)]
-        
-        # Loop through test cases and verify results
-        for test_name, patient_name, expected in tests:
-            try:
-                self.registry.update_patient_name('P-101', patient_name)
-                actual = self.registry.get_patient('P-101')['name']
-            except ValueError as e:
-                actual = type(e)
+    def test_update_non_existent_patient(self):
+        """Test that retrieving a non-existent patient before update raises KeyError."""
+        # REQ-04 | TESTS: TC-06, TC-G2
+        with self.assertRaises(KeyError):
+            self.registry.get_patient("P-9999")
 
-            if actual == expected:
-                print(f'{test_name}: PASS')
-            else:
-                print(f'{test_name}: FAIL (Expected {expected}, Got {actual})')
+    def test_update_invalid_name(self):
+        """Test updating a patient with an empty name raises ValueError."""
+        # REQ-04 | TESTS: TC-U3
+        pid = self.registry.register_patient("Alice")
+        with self.assertRaises(ValueError):
+            self.registry.update_patient_name(pid, "")
 
+    def test_update_nonexistent_id(self):
+        """Test update_patient_name with a valid name and non-existent ID raises KeyError."""
+        # REQ-04 | TESTS: TC-U2
+        with self.assertRaises(KeyError):
+            self.registry.update_patient_name("P-9999", "Alicia")
+
+    def test_update_invalid_name_nonexistent_id(self):
+        """Test update_patient_name with an empty name and non-existent ID raises ValueError."""
+        # REQ-04 | TESTS: TC-U4
+        with self.assertRaises(ValueError):
+            self.registry.update_patient_name("P-9999", "")
+
+    # --- Deletion tests ---
 
     def test_delete_patient(self):
-        """
-        Test cases for delete_patient(self, patient_id) method.
-        TESTS: REQ-05
-        """
-        print('\nTesting delete_patient()...\n')
+        """Test deleting a patient record removes it from the registry."""
+        # REQ-05 | TESTS: TC-D1
+        pid = self.registry.register_patient("Bob")
+        result = self.registry.delete_patient(pid)
 
-        # Test cases: normal deletion, non-existent ID
-        tests = [('Normal', 'P-101', KeyError),
-                 ('Non-Existent ID', 'P-999', KeyError)]
-        
-        # Loop through test cases and verify results
-        for test_name, pid, expected in tests:
-            self.registry = PatientRegistry()
+        self.assertTrue(result)
 
-            self.registry.register_patient('Alice')
+        with self.assertRaises(KeyError):
+            self.registry.get_patient(pid)
 
-            try:
-                self.registry.delete_patient(pid)
-                self.registry.get_patient(pid)
-            except (KeyError) as e:
-                actual = type(e)
+    def test_delete_non_existent_patient(self):
+        """Test that deleting a non-existent patient raises KeyError."""
+        # REQ-05 | TESTS: TC-D2
+        with self.assertRaises(KeyError):
+            self.registry.delete_patient("P-9999")
 
-            if actual == expected:
-                print(f'{test_name}: PASS')
-            else:
-                print(f'{test_name}: FAIL (Expected {expected}, Got {actual})')
+    # --- print_patients tests ---
 
+    def test_print_patients_empty(self):
+        """Test print_patients prints a message when no patients are registered."""
+        with patch('builtins.print') as mock_print:
+            self.registry.print_patients()
+            mock_print.assert_called_once_with("No patients registered.")
 
-    def test_component_1(self):
-        """
-        Component Test 1: Register a patient, update their name, and then 
-        retrieve the patient's information.
-        This test will verify that all operations work together as expected.
-        TESTS: REQ-01, REQ-02, REQ-03, REQ-04
-        """
-        print('\nRunning Component Test 1...\n')
+    def test_print_patients_with_records(self):
+        """Test print_patients prints each registered patient's ID and name."""
+        self.registry.register_patient("Alice")
+        self.registry.register_patient("Bob")
 
+        with patch('builtins.print') as mock_print:
+            self.registry.print_patients()
+            mock_print.assert_any_call("Patient ID: P-101, Name: Alice")
+            mock_print.assert_any_call("Patient ID: P-102, Name: Bob")
+            self.assertEqual(mock_print.call_count, 2)
+
+class TestPatientRegistryComponents(unittest.TestCase):
+
+    def setUp(self):
         self.registry = PatientRegistry()
 
-        # Step 1: Register a patient
-        patient_id = self.registry.register_patient('Alice')
+    def test_component_register_update_retrieve(self):
+        """
+        CT-01 - Valid multi-step workflow.
+        Workflow: register_patient() -> update_patient_name() -> get_patient()
+        TESTS: REQ-01, REQ-03, REQ-04
+        Branch coverage: False (success) paths in all three methods.
+        Condition coverage: C1 (not isinstance) = False, C2 (name=="") = False.
+        """
+        print('\nRunning Component Test: Register -> Update -> Retrieve...\n')
+
+        # Step 1: register
+        patient_id = self.registry.register_patient("Alice")
+        self.assertEqual(patient_id, "P-101")  # REQ-01: ID starts at P-101
         print(f'Registered patient with ID: {patient_id}')
 
-        # Step 2: Update the patient's name
-        self.registry.update_patient_name(patient_id, 'Alice Smith')
-        updated_name = self.registry.get_patient(patient_id)['name']
-        print(f'Updated patient name to: {updated_name}')
-        
-        # Step 3: Attempt to retrieve the deleted patient (should raise KeyError)
-        try:
-            self.registry.get_patient(patient_id)
-            print('PASS: Successfully retrieved patient after update')
-        except KeyError:
-            print('FAIL: Expected to retrieve patient after update, but got KeyError')
+        # Step 2: update name
+        updated = self.registry.update_patient_name(patient_id, "Alicia")
+        self.assertEqual(updated["patient_id"], patient_id)  # REQ-03: ID unchanged
+        self.assertEqual(updated["name"], "Alicia")          # REQ-04: name updated
+        print(f'Updated patient name to: {updated["name"]}')
 
+        # Step 3: retrieve and confirm state
+        record = self.registry.get_patient(patient_id)
+        self.assertEqual(record["patient_id"], patient_id)   # REQ-03: ID still P-101
+        self.assertEqual(record["name"], "Alicia")           # REQ-04: persisted name
+        self.assertNotEqual(record["name"], "Alice")         # old name is gone
+        print('PASS: Successfully retrieved patient after update')
 
-    def test_component_2(self):
+    def test_component_update_nonexistent_raises_key_error(self):
         """
-        Component Test 2: Register a patient, delete the patient, and then 
-        attempt to retrieve the patient's information.
-        This test will verify that deletion works correctly and that retrieving 
-        a deleted patient raises the appropriate error.
+        CT-02 - Failure workflow: update on unregistered ID is rejected.
+        Workflow: update_patient_name() on unregistered ID -> KeyError raised,
+                  get_patient() also raises KeyError (record was never inserted).
+        TESTS: REQ-02, REQ-04
+        Branch coverage: name guard False (valid name) -> ID guard True -> KeyError.
+        Condition coverage: C1 (not isinstance) = False, C2 (name=="") = False,
+        C3 (ID not in patients) = True.
+        """
+        print('\nRunning Component Test: Update Non-Existent -> Confirm No Ghost Record...\n')
+
+        # Step 1: update a patient ID that was never registered — must raise KeyError
+        with self.assertRaises(KeyError):
+            self.registry.update_patient_name("P-9999", "Ghost")
+        print('PASS: KeyError raised for update on unregistered ID')
+
+        # Step 2: confirm no ghost record was inserted
+        with self.assertRaises(KeyError):
+            self.registry.get_patient("P-9999")
+        print('PASS: No ghost record was inserted')
+
+    def test_component_register_delete_retrieve_fails(self):
+        """
+        CT-03 - Valid failure workflow.
+        Workflow: register_patient() -> delete_patient() -> get_patient()
         TESTS: REQ-01, REQ-02, REQ-05
+        Branch coverage: True path of `patient_id not in self.patients` in
+        get_patient() after deletion — complementary to CT-01's False path.
+        Condition coverage: C1 (not isdigit) = False, C2 (<101) = False,
+        then missing-ID guard = True -> KeyError raised.
         """
-        print('\nRunning Component Test 2...\n')
+        print('\nRunning Component Test: Register -> Delete -> Retrieve (fails)...\n')
 
-        self.registry = PatientRegistry()
-
-        # Step 1: Register a patient
-        patient_id = self.registry.register_patient('Alice')
+        # Step 1: register
+        patient_id = self.registry.register_patient("Bob")
+        self.assertEqual(patient_id, "P-101")
         print(f'Registered patient with ID: {patient_id}')
 
-        # Step 2: Delete the patient
-        self.registry.delete_patient(patient_id)
+        # Step 2: delete
+        result = self.registry.delete_patient(patient_id)
+        self.assertTrue(result)
+        print(f'Deleted patient with ID: {patient_id}')
 
-        # Step 3: Attempt to retrieve the deleted patient (should raise KeyError)
-        try:
+        # Step 3: retrieve must now fail with KeyError
+        with self.assertRaises(KeyError):
             self.registry.get_patient(patient_id)
-            print('FAIL: Expected KeyError when retrieving deleted patient')
-        except KeyError:
-            print('PASS: Successfully raised KeyError when retrieving deleted patient')
+        print('PASS: Successfully raised KeyError when retrieving deleted patient')
 
 
 if __name__ == '__main__':
