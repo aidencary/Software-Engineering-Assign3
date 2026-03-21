@@ -73,17 +73,23 @@ This system implements the following requirements:
 ```
 Software-Engineering-Assign3/
 │
-├── main.py                  # Menu-driven user interface
-├── patient_registry.py      # PatientRegistry class implementation
-├── test_patient.py          # Unit tests for all requirements
-├── README.md                # Complete project documentation
-├── PROJECT_SUMMARY.md       # Quick reference summary
-├── .gitignore               # Git ignore configuration
+├── main.py                      # Menu-driven user interface
+├── patient_registry.py          # PatientRegistry class implementation
+├── test_patient_registry.py     # Unit and component tests for all requirements
+├── requirements.txt             # Python dependencies (coverage)
+├── README.md                    # Complete project documentation
+├── .gitignore                   # Git ignore configuration
 │
 ├── docs/
-    ├── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
-    └── SPRS_High_Level_Diagram.drawio.pdf
-    └── SPRS_Class_Diagram.drawio.png
+│   ├── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
+│   ├── SPRS_High_Level_Diagram.drawio.pdf
+│   ├── SPRS_Class_Diagram.drawio.png
+│   └── Component-Testing-SPRS.drawio.png  # CT-01 and CT-02 workflow diagrams
+│
+├── test_cases/
+│   └── Software Engineering Assignment 4 - Aiden, Zach, and Keller.xlsx
+│
+└── target/                      # Generated — coverage report output (git-ignored)
 
 ```
 
@@ -113,18 +119,28 @@ python main.py
 ## Requirements
 
 - Python 3.x
+- coverage 7.13.5 (`pip install -r requirements.txt`)
+
 
 ## Testing
 
-Run unit tests:
+Run all tests (unit + component):
 ```bash
-python test_patient.py
+python -m unittest test_patient_registry -v
 ```
 
-Or run tests automatically before the application:
+Run with coverage and generate an HTML report:
 ```bash
-python main.py
+python -m coverage run -m unittest test_patient_registry
+python -m coverage html -d target/htmlcov
 ```
+
+### Test Suite Summary
+
+| Class | Tests | Coverage |
+|---|---|---|
+| `TestPatientRegistry` | 22 unit tests | REQ-01 – REQ-05, error handling, boundary values |
+| `TestPatientRegistryComponents` | 3 component tests | CT-01 (valid), CT-02 (defect), CT-03 (failure) |
 
 ## Implementation Principles
 
@@ -145,14 +161,21 @@ This project exemplifies professional software engineering practices:
 
 ### Testing Strategy
 
-- **Unit Testing**: 10 comprehensive test cases covering all requirements
+- **Unit Testing**: 22 test cases covering all requirements (REQ-01 through REQ-05)
+- **Component Testing**: 3 multi-step workflow tests (CT-01 valid, CT-02 defect, CT-03 failure) verifying method interactions across REQ-01 through REQ-05
+- **Equivalence Partitioning**: 10 partitions across `name` and `patient_id` inputs
+- **Boundary Value Analysis**: 3-point BVA on name length and patient ID numeric boundaries
+- **Decision Table Testing**: All condition/effect combinations for each method
 - **Edge Case Testing**: Invalid inputs, non-existent records, empty data
 - **Error Path Testing**: Validates proper exception handling
-- **Test Coverage**: 100% coverage of all public methods
+- **Coverage Analysis**: Statement, branch, and condition coverage annotations on all tests; 100% statement coverage of `patient_registry.py`
+- **Total Test Cases**: 25 automated tests across `TestPatientRegistry` and `TestPatientRegistryComponents`
 
 ## Member Contributions
 
-### Aiden Cary
+### Assignment 3 (Design & Implementation)
+
+#### Aiden Cary
 - Created initial main.py and patient_registry.py
 - Implemented REQ-01 (patient registration) and REQ-02 (patient retrieval)
 - Implemented print_patients() method for listing all records
@@ -164,7 +187,7 @@ This project exemplifies professional software engineering practices:
 - Added screenshot evidence to the report
 - Ensured PEP8 compliance across all files
 
-### Zach Atchley
+#### Zach Atchley
 - Helped create test_patient.py test suite
 - Implemented REQ-04 requirement (update patient name functionality)
 - Implemented the REQ-05 requirement (delete patient record functionality)
@@ -175,7 +198,7 @@ This project exemplifies professional software engineering practices:
 - Tested edge cases for deletion operations
 - Created High-Level Architecture diagram
 
-### Keller Willhite
+#### Keller Willhite
 - Helped create test_patient.py test suite
 - Finalized test_patient.py test suite with all 10 tests
 - Created comprehensive test cases for all requirements (REQ-01 through REQ-05)
@@ -185,3 +208,18 @@ This project exemplifies professional software engineering practices:
 - Validated data integrity through testing
 - Documented test requirement traceability with comments
 - Created class diagram
+
+### Assignment 4 (Testing Phase)
+
+#### Aiden Cary
+- Helped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
+- Added statement, branch, and condition coverage annotations to all test comments
+- Created Component-Testing-SPRS.drawio.png diagram illustrating CT-01, CT-02, and CT-03 workflows
+- Updated README to reflect Assignment 4 testing structure
+
+#### Zach Atchley
+- Helped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
+- Implemented component tests (Phase 3): CT-01 valid workflow, CT-02 defect workflow, CT-03 failure workflow
+
+#### Keller Willhite
+- Helpped implement all unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios

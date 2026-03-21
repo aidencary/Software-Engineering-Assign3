@@ -187,14 +187,14 @@ class TestPatientRegistry(unittest.TestCase):
 
     # --- Component tests ---
 
-    def test_component_1(self):
+    def test_component_register_update_retrieve(self):
         """
-        Component Test 1: Register a patient, update their name, and then
+        Component Test: Register a patient, update their name, and then
         retrieve the patient's information.
         This test will verify that all operations work together as expected.
         TESTS: REQ-01, REQ-02, REQ-03, REQ-04
         """
-        print('\nRunning Component Test 1...\n')
+        print('\nRunning Component Test: Register -> Update -> Retrieve...\n')
 
         self.registry = PatientRegistry()
 
@@ -214,15 +214,15 @@ class TestPatientRegistry(unittest.TestCase):
         except KeyError:
             print('FAIL: Expected to retrieve patient after update, but got KeyError')
 
-    def test_component_2(self):
+    def test_component_register_delete_retrieve_fails(self):
         """
-        Component Test 2: Register a patient, delete the patient, and then
+        Component Test: Register a patient, delete the patient, and then
         attempt to retrieve the patient's information.
         This test will verify that deletion works correctly and that retrieving
         a deleted patient raises the appropriate error.
         TESTS: REQ-01, REQ-02, REQ-05
         """
-        print('\nRunning Component Test 2...\n')
+        print('\nRunning Component Test: Register -> Delete -> Retrieve (fails)...\n')
 
         self.registry = PatientRegistry()
 
