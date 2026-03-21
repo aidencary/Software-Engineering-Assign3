@@ -217,9 +217,7 @@ This project exemplifies professional software engineering practices:
 - Added `KeyError` guard to `update_patient_name()` for non-existent patient IDs
 - Added statement, branch, and condition coverage annotations to all test comments
 - Renamed component tests to descriptive names (`test_component_register_update_retrieve`, `test_component_register_delete_retrieve_fails`)
-- Added `.coveragerc` to redirect HTML coverage output to `target/htmlcov/`
 - Added `requirements.txt` with `coverage` dependency
-- Updated `.gitignore` to exclude `target/`, `docs/htmlcov/`, and untracked previously committed generated files
 - Created Component-Testing-SPRS.drawio.png diagram illustrating CT-01 and CT-02 workflows
 - Updated README to reflect Assignment 4 testing structure
 

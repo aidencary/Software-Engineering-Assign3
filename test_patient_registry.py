@@ -185,60 +185,87 @@ class TestPatientRegistry(unittest.TestCase):
             mock_print.assert_any_call("Patient ID: P-102, Name: Bob")
             self.assertEqual(mock_print.call_count, 2)
 
-    # --- Component tests ---
+class TestPatientRegistryComponents(unittest.TestCase):
+
+    def setUp(self):
+        self.registry = PatientRegistry()
 
     def test_component_register_update_retrieve(self):
         """
-        Component Test: Register a patient, update their name, and then
-        retrieve the patient's information.
-        This test will verify that all operations work together as expected.
-        TESTS: REQ-01, REQ-02, REQ-03, REQ-04
+        CT-01 - Valid multi-step workflow.
+        Workflow: register_patient() -> update_patient_name() -> get_patient()
+        TESTS: REQ-01, REQ-03, REQ-04
+        Branch coverage: False (success) paths in all three methods.
+        Condition coverage: C1 (not isinstance) = False, C2 (name=="") = False.
         """
         print('\nRunning Component Test: Register -> Update -> Retrieve...\n')
 
-        self.registry = PatientRegistry()
-
-        # Step 1: Register a patient
-        patient_id = self.registry.register_patient('Alice')
+        # Step 1: register
+        patient_id = self.registry.register_patient("Alice")
+        self.assertEqual(patient_id, "P-101")  # REQ-01: ID starts at P-101
         print(f'Registered patient with ID: {patient_id}')
 
-        # Step 2: Update the patient's name
-        self.registry.update_patient_name(patient_id, 'Alice Smith')
-        updated_name = self.registry.get_patient(patient_id)['name']
-        print(f'Updated patient name to: {updated_name}')
+        # Step 2: update name
+        updated = self.registry.update_patient_name(patient_id, "Alicia")
+        self.assertEqual(updated["patient_id"], patient_id)  # REQ-03: ID unchanged
+        self.assertEqual(updated["name"], "Alicia")          # REQ-04: name updated
+        print(f'Updated patient name to: {updated["name"]}')
 
-        # Step 3: Attempt to retrieve the deleted patient (should raise KeyError)
-        try:
-            self.registry.get_patient(patient_id)
-            print('PASS: Successfully retrieved patient after update')
-        except KeyError:
-            print('FAIL: Expected to retrieve patient after update, but got KeyError')
+        # Step 3: retrieve and confirm state
+        record = self.registry.get_patient(patient_id)
+        self.assertEqual(record["patient_id"], patient_id)   # REQ-03: ID still P-101
+        self.assertEqual(record["name"], "Alicia")           # REQ-04: persisted name
+        self.assertNotEqual(record["name"], "Alice")         # old name is gone
+        print('PASS: Successfully retrieved patient after update')
+
+    def test_component_update_nonexistent_raises_key_error(self):
+        """
+        CT-02 - Failure workflow: update on unregistered ID is rejected.
+        Workflow: update_patient_name() on unregistered ID -> KeyError raised,
+                  get_patient() also raises KeyError (record was never inserted).
+        TESTS: REQ-02, REQ-04
+        Branch coverage: name guard False (valid name) -> ID guard True -> KeyError.
+        Condition coverage: C1 (not isinstance) = False, C2 (name=="") = False,
+        C3 (ID not in patients) = True.
+        """
+        print('\nRunning Component Test: Update Non-Existent -> Confirm No Ghost Record...\n')
+
+        # Step 1: update a patient ID that was never registered — must raise KeyError
+        with self.assertRaises(KeyError):
+            self.registry.update_patient_name("P-9999", "Ghost")
+        print('PASS: KeyError raised for update on unregistered ID')
+
+        # Step 2: confirm no ghost record was inserted
+        with self.assertRaises(KeyError):
+            self.registry.get_patient("P-9999")
+        print('PASS: No ghost record was inserted')
 
     def test_component_register_delete_retrieve_fails(self):
         """
-        Component Test: Register a patient, delete the patient, and then
-        attempt to retrieve the patient's information.
-        This test will verify that deletion works correctly and that retrieving
-        a deleted patient raises the appropriate error.
+        CT-03 - Valid failure workflow.
+        Workflow: register_patient() -> delete_patient() -> get_patient()
         TESTS: REQ-01, REQ-02, REQ-05
+        Branch coverage: True path of `patient_id not in self.patients` in
+        get_patient() after deletion — complementary to CT-01's False path.
+        Condition coverage: C1 (not isdigit) = False, C2 (<101) = False,
+        then missing-ID guard = True -> KeyError raised.
         """
         print('\nRunning Component Test: Register -> Delete -> Retrieve (fails)...\n')
 
-        self.registry = PatientRegistry()
-
-        # Step 1: Register a patient
-        patient_id = self.registry.register_patient('Alice')
+        # Step 1: register
+        patient_id = self.registry.register_patient("Bob")
+        self.assertEqual(patient_id, "P-101")
         print(f'Registered patient with ID: {patient_id}')
 
-        # Step 2: Delete the patient
-        self.registry.delete_patient(patient_id)
+        # Step 2: delete
+        result = self.registry.delete_patient(patient_id)
+        self.assertTrue(result)
+        print(f'Deleted patient with ID: {patient_id}')
 
-        # Step 3: Attempt to retrieve the deleted patient (should raise KeyError)
-        try:
+        # Step 3: retrieve must now fail with KeyError
+        with self.assertRaises(KeyError):
             self.registry.get_patient(patient_id)
-            print('FAIL: Expected KeyError when retrieving deleted patient')
-        except KeyError:
-            print('PASS: Successfully raised KeyError when retrieving deleted patient')
+        print('PASS: Successfully raised KeyError when retrieving deleted patient')
 
 
 if __name__ == '__main__':
