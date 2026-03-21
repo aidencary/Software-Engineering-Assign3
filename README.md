@@ -84,7 +84,7 @@ Software-Engineering-Assign3/
 │   ├── CSCI 4490_Practice_2_Requirements to Design to Implementation(1).pdf
 │   ├── SPRS_High_Level_Diagram.drawio.pdf
 │   ├── SPRS_Class_Diagram.drawio.png
-│   └── Component-Testing-SPRS.drawio.png  # CT-01 and CT-02 workflow diagrams
+│   └── Component-Testing.drawio.png       # CT-01, CT-02, and CT-03 workflow diagrams
 │
 ├── test_cases/
 │   └── Software Engineering Assignment 4 - Aiden, Zach, and Keller.xlsx
@@ -139,7 +139,8 @@ python -m coverage html -d target/htmlcov
 
 | Class | Tests | Coverage |
 |---|---|---|
-| `TestPatientRegistry` | 22 unit tests + 2 component tests | REQ-01 – REQ-05, error handling, boundary values, CT-01 and CT-02 workflows |
+| `TestPatientRegistry` | 22 unit tests | REQ-01 – REQ-05, error handling, boundary values |
+| `TestPatientRegistryComponents` | 3 component tests | CT-01 (valid), CT-02 (ghost record), CT-03 (failure) |
 
 ## Implementation Principles
 
@@ -161,14 +162,14 @@ This project exemplifies professional software engineering practices:
 ### Testing Strategy
 
 - **Unit Testing**: 22 test cases covering all requirements (REQ-01 through REQ-05)
-- **Component Testing**: 2 multi-step workflow tests (CT-01 register→update→retrieve, CT-02 register→delete→retrieve) verifying method interactions across REQ-01 through REQ-05
+- **Component Testing**: 3 multi-step workflow tests (CT-01 register→update→retrieve, CT-02 update non-existent ID, CT-03 register→delete→retrieve) verifying method interactions across REQ-01 through REQ-05
 - **Equivalence Partitioning**: 10 partitions across `name` and `patient_id` inputs
 - **Boundary Value Analysis**: 3-point BVA on name length and patient ID numeric boundaries
 - **Decision Table Testing**: All condition/effect combinations for each method
 - **Edge Case Testing**: Invalid inputs, non-existent records, empty data
 - **Error Path Testing**: Validates proper exception handling
 - **Coverage Analysis**: Statement, branch, and condition coverage annotations on all tests; 100% statement coverage of `patient_registry.py`
-- **Total Test Cases**: 24 automated tests in `TestPatientRegistry`
+- **Total Test Cases**: 25 automated tests across `TestPatientRegistry` and `TestPatientRegistryComponents`
 
 ## Member Contributions
 
@@ -216,14 +217,18 @@ This project exemplifies professional software engineering practices:
 - Added `print_patients()` back to `patient_registry.py` after it was removed during merge
 - Added `KeyError` guard to `update_patient_name()` for non-existent patient IDs
 - Added statement, branch, and condition coverage annotations to all test comments
-- Renamed component tests to descriptive names (`test_component_register_update_retrieve`, `test_component_register_delete_retrieve_fails`)
+- Moved component tests into a separate `TestPatientRegistryComponents` class
+- Replaced print-based pass/fail logic with proper `unittest` assertions while preserving print output
+- Added CT-02 (`test_component_update_nonexistent_raises_key_error`) to verify no ghost record is inserted on a failed update
+- Renamed component tests to descriptive method names
 - Added `requirements.txt` with `coverage` dependency
-- Created Component-Testing-SPRS.drawio.png diagram illustrating CT-01 and CT-02 workflows
+- Removed generated files from git tracking (`.coverage`, `__pycache__`, `docs/htmlcov/`)
+- Created and updated Component-Testing.drawio.png diagram illustrating CT-01, CT-02, and CT-03 workflows
 - Updated README to reflect Assignment 4 testing structure
 
 #### Zach Atchley
 - Refactored test suite: replaced `test_patient.py` with `test_patient_registry.py`
-- Implemented component tests CT-01 (register→update→retrieve) and CT-02 (register→delete→retrieve)
+- Implemented initial component tests CT-01 (register→update→retrieve) and CT-03 (register→delete→retrieve)
 - Removed `print_patients()` method and `__main__` block from `patient_registry.py`
 - Helped implement unit tests (Phase 2): normal, edge, boundary, and invalid-input scenarios
 
